@@ -56,14 +56,18 @@ scoreBoard2.style.fontSize = '50px'
 //Game time
 let timeLimit = 300
 let time = timeLimit
-let timeResume = true
+let timeResume = false
 board.innerText = time
 setInterval(() => {
     if (timeResume) {
         time--
         board.innerText = time
         if (time < 1) {
-            Engine.enabled = false
+            allowControls = false
+            timeResume = false
+            keysDown = {}
+            countDown.style.display = 'block'
+            countDown.innerText = 'game over'
         }
     }
 }, 1000)
@@ -383,13 +387,44 @@ Render.run(render);
 // Using an array to handle multiple keys being pressed
 let keysDown = {
 }
+
+let allowControls = false
+let = countDownTime = 3
+let countDown = document.createElement('DIV')
+document.body.appendChild(countDown)
+countDown.innerText = countDownTime
+countDown.style.position = 'absolute'
+countDown.style.background = 'rgba(255,150,0,0)'
+countDown.style.color = '#fff'
+countDown.style.width = '200px'
+countDown.style.height = '200px'
+countDown.style.zIndex = '5'
+countDown.style.textAlign = 'center'
+countDown.style.left = '860px'
+countDown.style.top = '350px'
+countDown.style.paddingTop = '30px'
+countDown.style.fontSize = '100px'
+let = countDownInterval = setInterval(() => {
+    if (countDownTime > 1) {
+        countDownTime--
+        countDown.innerText = countDownTime
+    }
+    else {
+        countDown.style.display = 'none'
+        timeResume = true
+        allowControls = true
+        clearInterval(countDownInterval)
+    }
+}, 1000)
+
 document.body.onkeydown = function (e) {
     //e.preventDefault() // cancels default actions
-    if (!keysDown[e.key.toLocaleLowerCase()]) {
-        keysDown[e.key.toLocaleLowerCase()] = true
+    if (allowControls) {
+        if (!keysDown[e.key.toLocaleLowerCase()]) {
+            keysDown[e.key.toLocaleLowerCase()] = true
+        }
     }
-    console.log(keysDown)
-    //return false; // cancels this function as well as default actions
+
 }
 // document.body.addEventListener('keydown', (e) => {
 //     e.preventDefault() // cancels default actions
