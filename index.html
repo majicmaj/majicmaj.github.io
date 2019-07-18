@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,29 @@
     <title>Rocket Ball</title>
     <script src='matter.js'></script>
 </head>
-<body><script src='script.js'></script>
+
+<body>
+    <script src='script.js'></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCE8dWGiGcjUDKzHBCGM5XUysjKBPsVY_k",
+            authDomain: "rocekt-ball.firebaseapp.com",
+            databaseURL: "https://rocekt-ball.firebaseio.com",
+            projectId: "rocekt-ball",
+            storageBucket: "",
+            messagingSenderId: "4703971015",
+            appId: "1:4703971015:web:a487070439684f34"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
 </body>
+
 </html>
