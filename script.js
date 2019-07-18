@@ -1,7 +1,9 @@
 // ez references
-Matter = import('https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.11.0/matter.js')
+Matter = import(
+    'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.12.0/matter.js'
+)
 
-const Engine = Matter.Engine,
+var Engine = Matter.Engine,
     Render = Matter.Render,
     World = Matter.World,
     Bodies = Matter.Bodies,
