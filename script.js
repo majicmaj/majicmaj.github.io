@@ -1,5 +1,6 @@
 // ez references
 Matter = import('https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.11.0/matter.js')
+
 const Engine = Matter.Engine,
     Render = Matter.Render,
     World = Matter.World,
@@ -54,7 +55,7 @@ scoreBoard2.style.paddingTop = '30px'
 scoreBoard2.style.fontSize = '50px'
 
 //Game time
-let timeLimit = 3
+let timeLimit = 300
 let time = timeLimit
 let timeResume = true
 board.innerText = time
