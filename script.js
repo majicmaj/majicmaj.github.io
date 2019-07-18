@@ -54,7 +54,7 @@ scoreBoard2.style.paddingTop = '30px'
 scoreBoard2.style.fontSize = '50px'
 
 //Game time
-let timeLimit = 3
+let timeLimit = 300
 let time = timeLimit
 let timeResume = true
 board.innerText = time
