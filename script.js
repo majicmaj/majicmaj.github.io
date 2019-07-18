@@ -53,7 +53,8 @@ scoreBoard2.style.textAlign = 'center'
 scoreBoard2.style.left = '1060px'
 scoreBoard2.style.paddingTop = '30px'
 scoreBoard2.style.fontSize = '50px'
-
+let scoreOrange = 0
+let scoreBlue = 0
 //Game time
 let timeLimit = 300
 let time = timeLimit
@@ -68,7 +69,16 @@ setInterval(() => {
             timeResume = false
             keysDown = {}
             countDown.style.display = 'block'
-            countDown.innerText = 'game over'
+            //check who won
+            if (scoreBlue > scoreOrange) {
+                countDown.innerText = 'Blue Wins!'
+            }
+            else if (scoreBlue > scoreOrange) {
+                countDown.innerText = 'Orange Wins!'
+            }
+            else {
+                countDown.innerText = "It's a tie!"
+            }
         }
     }
 }, 1000)
@@ -222,8 +232,8 @@ var ball = Bodies.circle(
         },
         friction: 0.1,
         frictionAir: 0.01,
-        restitution: 1,
-        mass: 0.5
+        restitution: 0.99,
+        mass: 0.25
     }
 );
 // Car 1
@@ -388,7 +398,7 @@ let keysDown = {
 }
 
 let allowControls = false
-let = countDownTime = 3
+let countDownTime = 3
 let countDown = document.createElement('DIV')
 document.body.appendChild(countDown)
 countDown.innerText = countDownTime
@@ -403,201 +413,12 @@ countDown.style.left = '860px'
 countDown.style.top = '350px'
 countDown.style.paddingTop = '30px'
 countDown.style.fontSize = '100px'
-let = countDownInterval = setInterval(() => {
-    if (countDownTime > 1) {
-        countDownTime--
-        countDown.innerText = countDownTime
-    }
-    else {
-        countDown.style.display = 'none'
-        timeResume = true
-        allowControls = true
-        clearInterval(countDownInterval)
-    }
-}, 1000)
 
-document.body.onkeydown = function (e) {
-    //e.preventDefault() // cancels default actions
-    if (allowControls) {
-        if (!keysDown[e.key.toLocaleLowerCase()]) {
-            keysDown[e.key.toLocaleLowerCase()] = true
-        }
-    }
 
-}
-// document.body.addEventListener('keydown', (e) => {
-//     e.preventDefault() // cancels default actions
-//     if (!keysDown[e.key.toLocaleLowerCase()]) {
-//         keysDown[e.key.toLocaleLowerCase()] = true
-//     }
-//     console.log(keysDown)
-//     return false; // cancels this function only
-// })
-document.body.addEventListener('keyup', (e) => {
-    e.preventDefault() // cancels default actions
-    keysDown[e.key.toLocaleLowerCase()] = false
-    //return false; // cancels this function only
-})
-let i = 1
-setTimeout(() => {
-    setInterval(() => { move() }, 10)
-}, 3)
-
-car.frontWheel.friction = 1
-car.backWheel.friction = 1
-car.canJump1 = true
-car.canJump2 = false
-car2.frontWheel.friction = 1
-car2.backWheel.friction = 1
-car2.canJump1 = true
-car2.canJump2 = false
-move = () => {
-    if (keysDown['d']) {
-        if (car.frontWheel.angularVelocity < 0.6) {
-            Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity + Math.PI / 20)
-            Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity + Math.PI / 20)
-        }
-    }
-    if (keysDown['a']) {
-        if (car.frontWheel.angularVelocity > -0.6) {
-            Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity - Math.PI / 20)
-            Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity - Math.PI / 20)
-        }
-    }
-    if (keysDown['e']) {
-        Body.applyForce(
-            car.body,
-            { x: car.body.position.x - 30, y: car.body.position.y + 1 },
-            { x: 0.0006 * (Math.cos(car.body.angle)), y: -0.0006 * (Math.sin(car.body.angle)) }
-        )
-    }
-    if (keysDown['w']) {
-        if (car.canJump1) {
-            Body.applyForce(
-                car.body,
-                { x: car.body.position.x, y: car.body.position.y },
-                { x: 0, y: -0.015 }
-            )
-            car.canJump1 = false
-            setTimeout(() => { car.canJump2 = true }, 200)
-            setTimeout(() => { car.canJump1 = true, car.canJump2 = false }, 1500)
-        }
-        else if (car.canJump2) {
-            if (keysDown['a']) {
-                Body.applyForce(
-                    car.body,
-                    { x: car.body.position.x, y: car.body.position.y },
-                    { x: -0.01, y: -0.022 }
-                )
-                Body.setAngularVelocity(
-                    car.body, -0.3
-                )
-            }
-            else if (keysDown['d']) {
-                Body.applyForce(
-                    car.body,
-                    { x: car.body.position.x, y: car.body.position.y },
-                    { x: 0.022, y: -0.005 }
-                )
-                Body.setAngularVelocity(
-                    car.body, 0.3
-                )
-            }
-            else {
-                Body.applyForce(
-                    car.body,
-                    { x: car.body.position.x, y: car.body.position.y },
-                    { x: 0, y: -0.015 }
-                )
-            }
-            car.canJump2 = false
-        }
-    }
-    if (keysDown['6']) {
-        if (car2.frontWheel.angularVelocity < 0.6) {
-            Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity + Math.PI / 20)
-            Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity + Math.PI / 20)
-        }
-    }
-    if (keysDown['4']) {
-        if (car2.frontWheel.angularVelocity > -0.6) {
-            Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity - Math.PI / 20)
-            Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity - Math.PI / 20)
-        }
-    }
-    if (keysDown['7']) {
-        Body.applyForce(
-            car2.body,
-            { x: car2.body.position.x + 30, y: car2.body.position.y + 1 },
-            { x: -0.0006 * (Math.cos(car2.body.angle)), y: -0.0001 + (-0.0006 * (Math.sin(car2.body.angle))) }
-        )
-    }
-    if (keysDown['8']) {
-        if (car2.canJump1) {
-            Body.applyForce(
-                car2.body,
-                { x: car2.body.position.x, y: car2.body.position.y },
-                { x: 0, y: -0.015 }
-            )
-            car2.canJump1 = false
-            setTimeout(() => { car2.canJump2 = true }, 100)
-            setTimeout(() => { car2.canJump1 = true, car2.canJump2 = false }, 1500)
-        }
-        else if (car2.canJump2) {
-            if (keysDown['4']) {
-                Body.applyForce(
-                    car2.body,
-                    { x: car2.body.position.x, y: car2.body.position.y },
-                    { x: -0.022, y: -0.005 }
-                )
-                Body.setAngularVelocity(
-                    car2.body, -0.3
-                )
-            }
-            else if (keysDown['6']) {
-                Body.applyForce(
-                    car2.body,
-                    { x: car2.body.position.x, y: car2.body.position.y },
-                    { x: 0.01, y: -0.022 }
-                )
-                Body.setAngularVelocity(
-                    car2.body, 0.3
-                )
-            }
-            else {
-                Body.applyForce(
-                    car2.body,
-                    { x: car2.body.position.x, y: car2.body.position.y },
-                    { x: 0, y: -0.015 }
-                )
-            }
-            car2.canJump2 = false
-        }
-    }
-}
-// Change background image to very awesome rocket league bg
-render.canvas.style.background = 'URL(background.jpg)'
-
-Matter.Events.on(engine, 'collisionStart', function (event) {
-    event.pairs.forEach(pair => {
-        let a = pair.bodyA
-        let b = pair.bodyB
-        if (a === (leftGoalBackWall) && b === ball) {
-            console.log("Orange Scored")
-            scoreOrange++
-            resetPositions()
-        }
-        else if (a === (rightGoalBackWall || rightGoalTopWall) && b === ball) {
-            console.log("Blue Scored")
-            scoreBlue++
-            resetPositions()
-        }
-    });
-});
-let scoreOrange = 0
-let scoreBlue = 0
 resetPositions = () => {
     //reset ball
+    allowControls = false
+    keysDown = {}
     Body.setPosition(ball, { x: render.options.width / 2, y: render.options.height - 100 })
     Body.setAngularVelocity(ball, 0)
     Body.setVelocity(ball, { x: 0, y: 0 })
@@ -615,4 +436,261 @@ resetPositions = () => {
     Body.setAngularVelocity(car2.body, 0)
     scoreBoard.innerText = scoreBlue
     scoreBoard2.innerText = scoreOrange
+    allowControls = false
+    countDownTime = 5
+    countDown.style.display = 'block'
+    let = countDownInterval = setInterval(() => {
+        countDownTime--
+        if (countDownTime > 0) {
+            if (countDownTime < 4) {
+
+                countDown.innerText = countDownTime
+            }
+        }
+        else {
+            countDown.style.display = 'none'
+            timeResume = true
+            allowControls = true
+            clearInterval(countDownInterval)
+        }
+    }, 1000)
 }
+
+resetPositions()
+
+document.body.onkeydown = function (e) {
+    //e.preventDefault() // cancels default actions
+    if (allowControls) {
+        if (!keysDown[e.key.toLowerCase()]) {
+            keysDown[e.key.toLowerCase()] = true
+        }
+    }
+
+}
+document.body.addEventListener('keyup', (e) => {
+    e.preventDefault() // cancels default actions
+    keysDown[e.key.toLocaleLowerCase()] = false
+})
+
+setInterval(() => {
+    if (timeResume) { move() }
+}, 10)
+
+car.frontWheel.friction = 1
+car.backWheel.friction = 1
+car.canJump1 = true
+car.canJump2 = false
+car2.frontWheel.friction = 1
+car2.backWheel.friction = 1
+car2.canJump1 = true
+car2.canJump2 = false
+
+let acceleration = Math.PI / 20
+let maxRPM = 0.5
+let boostForce = 0.0003
+let jumpHeight = 0.012
+let firstJumpCD = 1000
+let secondJumpWait = 250
+let flipTorque = 0.2
+let boostBase = { x: -30, y: 0 } // x and y
+move = () => {
+    if (keysDown['d']) {
+        if (car.frontWheel.angularVelocity < maxRPM) {
+            Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity + acceleration)
+            Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity + acceleration)
+        }
+    }
+    if (keysDown['a']) {
+        if (car.frontWheel.angularVelocity > -maxRPM) {
+            Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity - acceleration)
+            Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity - acceleration)
+        }
+    }
+    if (keysDown['e']) {
+        Body.applyForce(
+            car.body,
+            { x: car.body.position.x + boostBase.x, y: car.body.position.y + boostBase.y },
+            { x: boostForce * (Math.cos(car.body.angle)), y: -boostForce * (Math.sin(car.body.angle)) }
+        )
+    }
+    if (keysDown['w']) {
+        if (car.canJump1) {
+            Body.applyForce(
+                car.body,
+                { x: car.body.position.x, y: car.body.position.y },
+                { x: 0, y: -jumpHeight }
+            )
+            car.canJump1 = false
+            setTimeout(() => { car.canJump2 = true }, secondJumpWait)
+            setTimeout(() => { car.canJump1 = true, car.canJump2 = false }, firstJumpCD)
+        }
+        else if (car.canJump2) {
+            if (keysDown['a']) {
+                if (keysDown['e']) {
+                    Body.applyForce(
+                        car.body,
+                        { x: car.body.position.x, y: car.body.position.y },
+                        { x: -jumpHeight, y: -jumpHeight }
+                    )
+                    Body.setAngularVelocity(
+                        car.body, -flipTorque
+                    )
+                }
+                Body.applyForce(
+                    car.body,
+                    { x: car.body.position.x, y: car.body.position.y },
+                    { x: -jumpHeight, y: -1.5 * jumpHeight }
+                )
+                Body.setAngularVelocity(
+                    car.body, -flipTorque
+                )
+            }
+            else if (keysDown['d']) {
+                if (keysDown['e']) {
+                    Body.applyForce(
+                        car.body,
+                        { x: car.body.position.x, y: car.body.position.y },
+                        { x: 2 * jumpHeight, y: 0 }
+                    )
+                    Body.setAngularVelocity(
+                        car.body, flipTorque
+                    )
+                }
+                Body.applyForce(
+                    car.body,
+                    { x: car.body.position.x, y: car.body.position.y },
+                    { x: 2 * jumpHeight, y: 0 }
+                )
+                Body.setAngularVelocity(
+                    car.body, flipTorque
+                )
+            }
+            else {
+
+                if (keysDown['e']) {
+                    Body.applyForce(
+                        car.body,
+                        { x: car.body.position.x, y: car.body.position.y },
+                        { x: 0, y: -jumpHeight }
+                    )
+                }
+                Body.applyForce(
+                    car.body,
+                    { x: car.body.position.x, y: car.body.position.y },
+                    { x: 0, y: -jumpHeight }
+                )
+            }
+            car.canJump2 = false
+        }
+    }
+    if (keysDown['6']) {
+        if (car2.frontWheel.angularVelocity < maxRPM) {
+            Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity + acceleration)
+            Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity + acceleration)
+        }
+    }
+    if (keysDown['4']) {
+        if (car2.frontWheel.angularVelocity > -maxRPM) {
+            Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity - acceleration)
+            Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity - acceleration)
+        }
+    }
+    if (keysDown['7']) {
+        Body.applyForce(
+            car2.body,
+            { x: car2.body.position.x + boostBase.x, y: car2.body.position.y + boostBase.y },
+            { x: -boostForce * (Math.cos(car2.body.angle)), y: -boostForce * (Math.sin(car2.body.angle)) }
+        )
+    }
+    if (keysDown['8']) {
+        if (car2.canJump1) {
+            Body.applyForce(
+                car2.body,
+                { x: car2.body.position.x, y: car2.body.position.y },
+                { x: 0, y: -jumpHeight }
+            )
+            car2.canJump1 = false
+            setTimeout(() => { car2.canJump2 = true }, secondJumpWait)
+            setTimeout(() => { car2.canJump1 = true, car2.canJump2 = false }, firstJumpCD)
+        }
+        else if (car2.canJump2) {
+            if (keysDown['4']) {
+                if (keysDown['7']) {
+                    Body.applyForce(
+                        car2.body,
+                        { x: car2.body.position.x, y: car2.body.position.y },
+                        { x: -jumpHeight, y: -jumpHeight }
+                    )
+                    Body.setAngularVelocity(
+                        car2.body, -flipTorque
+                    )
+                }
+                Body.applyForce(
+                    car2.body,
+                    { x: car2.body.position.x, y: car2.body.position.y },
+                    { x: -jumpHeight, y: -1.5 * jumpHeight }
+                )
+                Body.setAngularVelocity(
+                    car2.body, -flipTorque
+                )
+            }
+            else if (keysDown['6']) {
+                if (keysDown['7']) {
+                    Body.applyForce(
+                        car2.body,
+                        { x: car2.body.position.x, y: car2.body.position.y },
+                        { x: 2 * jumpHeight, y: 0 }
+                    )
+                    Body.setAngularVelocity(
+                        car2.body, flipTorque
+                    )
+                }
+                Body.applyForce(
+                    car2.body,
+                    { x: car2.body.position.x, y: car2.body.position.y },
+                    { x: 2 * jumpHeight, y: 0 }
+                )
+                Body.setAngularVelocity(
+                    car2.body, flipTorque
+                )
+            }
+            else {
+
+                if (keysDown['7']) {
+                    Body.applyForce(
+                        car2.body,
+                        { x: car2.body.position.x, y: car2.body.position.y },
+                        { x: 0, y: -jumpHeight }
+                    )
+                }
+                Body.applyForce(
+                    car2.body,
+                    { x: car2.body.position.x, y: car2.body.position.y },
+                    { x: 0, y: -jumpHeight }
+                )
+            }
+            car2.canJump2 = false
+        }
+    }
+}
+// Change background image to very awesome rocket league bg
+render.canvas.style.background = 'URL(background.jpg)'
+
+Matter.Events.on(engine, 'collisionStart', function (event) {
+    event.pairs.forEach(pair => {
+        let a = pair.bodyA
+        let b = pair.bodyB
+        if (a === (leftGoalBackWall) && b === ball) {
+            countDown.innerText = 'Orange scored!'
+            countDown.style.display = 'block'
+            scoreOrange++
+            resetPositions()
+        }
+        else if (a === (rightGoalBackWall || rightGoalTopWall) && b === ball) {
+            countDown.innerText = 'Blue scored!'
+            countDown.style.display = 'block'
+            scoreBlue++
+            resetPositions()
+        }
+    });
+});
