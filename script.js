@@ -509,7 +509,7 @@ move = () => {
     if (keysDown['e']) {
         Body.applyForce(
             car.body,
-            { x: car.body.position.x + boostBase.x, y: car.body.position.y + boostBase.y },
+            { x: car.body.position.x - boostBase.x, y: car.body.position.y + boostBase.y },
             { x: boostForce * (Math.cos(car.body.angle)), y: -boostForce * (Math.sin(car.body.angle)) }
         )
     }
@@ -525,7 +525,27 @@ move = () => {
             setTimeout(() => { car.canJump1 = true, car.canJump2 = false }, firstJumpCD)
         }
         else if (car.canJump2) {
-            if (keysDown['a']) {
+            if (keysDown['d']) {
+                if (keysDown['e']) {
+                    Body.applyForce(
+                        car.body,
+                        { x: car.body.position.x, y: car.body.position.y },
+                        { x: 1.5 * jumpHeight, y: 0 }
+                    )
+                    Body.setAngularVelocity(
+                        car.body, flipTorque
+                    )
+                }
+                Body.applyForce(
+                    car.body,
+                    { x: car.body.position.x, y: car.body.position.y },
+                    { x: 1.5 * jumpHeight, y: 0 }
+                )
+                Body.setAngularVelocity(
+                    car.body, flipTorque
+                )
+            }
+            else if (keysDown['a']) {
                 if (keysDown['e']) {
                     Body.applyForce(
                         car.body,
@@ -545,26 +565,6 @@ move = () => {
                     car.body, -flipTorque
                 )
             }
-            else if (keysDown['d']) {
-                if (keysDown['e']) {
-                    Body.applyForce(
-                        car.body,
-                        { x: car.body.position.x, y: car.body.position.y },
-                        { x: 2 * jumpHeight, y: 0 }
-                    )
-                    Body.setAngularVelocity(
-                        car.body, flipTorque
-                    )
-                }
-                Body.applyForce(
-                    car.body,
-                    { x: car.body.position.x, y: car.body.position.y },
-                    { x: 2 * jumpHeight, y: 0 }
-                )
-                Body.setAngularVelocity(
-                    car.body, flipTorque
-                )
-            }
             else {
 
                 if (keysDown['e']) {
@@ -572,6 +572,9 @@ move = () => {
                         car.body,
                         { x: car.body.position.x, y: car.body.position.y },
                         { x: 0, y: -jumpHeight }
+                    )
+                    Body.setAngularVelocity(
+                        car.body, -0.5 * flipTorque
                     )
                 }
                 Body.applyForce(
@@ -583,6 +586,7 @@ move = () => {
             car.canJump2 = false
         }
     }
+    //car 2
     if (keysDown['6']) {
         if (car2.frontWheel.angularVelocity < maxRPM) {
             Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity + acceleration)
@@ -619,7 +623,7 @@ move = () => {
                     Body.applyForce(
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
-                        { x: -jumpHeight, y: -jumpHeight }
+                        { x: -1.5 * jumpHeight, y: 0 }
                     )
                     Body.setAngularVelocity(
                         car2.body, -flipTorque
@@ -628,7 +632,7 @@ move = () => {
                 Body.applyForce(
                     car2.body,
                     { x: car2.body.position.x, y: car2.body.position.y },
-                    { x: -jumpHeight, y: -1.5 * jumpHeight }
+                    { x: -1.5 * jumpHeight, y: 0 }
                 )
                 Body.setAngularVelocity(
                     car2.body, -flipTorque
@@ -639,7 +643,7 @@ move = () => {
                     Body.applyForce(
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
-                        { x: 2 * jumpHeight, y: 0 }
+                        { x: jumpHeight, y: -jumpHeight }
                     )
                     Body.setAngularVelocity(
                         car2.body, flipTorque
@@ -648,7 +652,7 @@ move = () => {
                 Body.applyForce(
                     car2.body,
                     { x: car2.body.position.x, y: car2.body.position.y },
-                    { x: 2 * jumpHeight, y: 0 }
+                    { x: jumpHeight, y: -1.5 * jumpHeight }
                 )
                 Body.setAngularVelocity(
                     car2.body, flipTorque
@@ -661,6 +665,9 @@ move = () => {
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
                         { x: 0, y: -jumpHeight }
+                    )
+                    Body.setAngularVelocity(
+                        car.body, 0.5 * flipTorque
                     )
                 }
                 Body.applyForce(
