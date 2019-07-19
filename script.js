@@ -1,20 +1,23 @@
-// ez references
-
+// Matter Aliases
 const Engine = Matter.Engine,
     Events = Matter.Events,
     Render = Matter.Render,
     World = Matter.World,
     Bodies = Matter.Bodies,
     Body = Matter.Body,
-    // Composites = Matter.Composites,
-    // Composite = Matter.Composite,
     Constraint = Matter.Constraint,
     Detector = Matter.Detector,
     Runner = Matter.Runner;
 
-// Score board
 
+// document styling
 document.body.style.fontFamily = "'Squada One', cursive"
+
+//
+// Scoreboard
+//
+
+// Middle Section 
 let board = document.createElement('SECTION')
 document.body.appendChild(board)
 board.style.position = 'absolute'
@@ -27,6 +30,8 @@ board.style.textAlign = 'center'
 board.style.left = '860px'
 board.style.paddingTop = '30px'
 board.style.fontSize = '50px'
+
+// Blue Section
 let scoreBoard = document.createElement('DIV')
 document.body.appendChild(scoreBoard)
 scoreBoard.innerText = '0'
@@ -40,6 +45,8 @@ scoreBoard.style.textAlign = 'center'
 scoreBoard.style.left = '780px'
 scoreBoard.style.paddingTop = '30px'
 scoreBoard.style.fontSize = '50px'
+
+// Red Section
 let scoreBoard2 = document.createElement('DIV')
 document.body.appendChild(scoreBoard2)
 scoreBoard2.innerText = '0'
@@ -53,13 +60,44 @@ scoreBoard2.style.textAlign = 'center'
 scoreBoard2.style.left = '1060px'
 scoreBoard2.style.paddingTop = '30px'
 scoreBoard2.style.fontSize = '50px'
+
+//
+// Initialize
+//
+
+// Initgame scores
 let scoreOrange = 0
 let scoreBlue = 0
-//Game time
+
+//
+// Variables
+//
+
+//Game
 let timeLimit = 300
 let time = timeLimit
-let timeResume = false
-board.innerText = time
+let timeResume = false //stops time when serving the ball
+// Car
+let acceleration = Math.PI / 20
+let maxRPM = 0.5
+let boostForce = 0.0003
+let jumpHeight = 0.012
+let firstJumpCD = 1000
+let secondJumpWait = 250
+let flipTorque = 0.2
+let boostBase = { x: -30, y: 0 } // x and y
+// Car controls
+let carLeft = 'a'
+let carRight = 'd'
+let carUp = 'w'
+let carBoost = 'e'
+// Car2 controls
+let car2Left = 'j'
+let car2Right = 'l'
+let car2Up = 'i'
+let car2Boost = 'u'
+
+board.innerText = time //Sets the board to display the inital value of time
 setInterval(() => {
     if (timeResume) {
         time--
@@ -459,12 +497,14 @@ resetPositions = () => {
 resetPositions()
 
 document.body.onkeydown = function (e) {
-    //e.preventDefault() // cancels default actions
+    e.preventDefault() // cancels default actions
     if (allowControls) {
         if (!keysDown[e.key.toLowerCase()]) {
             keysDown[e.key.toLowerCase()] = true
         }
     }
+    console.log(keysDown)
+    return false
 
 }
 document.body.addEventListener('keyup', (e) => {
@@ -485,35 +525,27 @@ car2.backWheel.friction = 1
 car2.canJump1 = true
 car2.canJump2 = false
 
-let acceleration = Math.PI / 20
-let maxRPM = 0.5
-let boostForce = 0.0003
-let jumpHeight = 0.012
-let firstJumpCD = 1000
-let secondJumpWait = 250
-let flipTorque = 0.2
-let boostBase = { x: -30, y: 0 } // x and y
 move = () => {
-    if (keysDown['d']) {
+    if (keysDown[carRight]) {
         if (car.frontWheel.angularVelocity < maxRPM) {
             Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity + acceleration)
             Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity + acceleration)
         }
     }
-    if (keysDown['a']) {
+    if (keysDown[carLeft]) {
         if (car.frontWheel.angularVelocity > -maxRPM) {
             Body.setAngularVelocity(car.frontWheel, car.frontWheel.angularVelocity - acceleration)
             Body.setAngularVelocity(car.backWheel, car.frontWheel.angularVelocity - acceleration)
         }
     }
-    if (keysDown['e']) {
+    if (keysDown[carBoost]) {
         Body.applyForce(
             car.body,
             { x: car.body.position.x - boostBase.x, y: car.body.position.y + boostBase.y },
             { x: boostForce * (Math.cos(car.body.angle)), y: -boostForce * (Math.sin(car.body.angle)) }
         )
     }
-    if (keysDown['w']) {
+    if (keysDown[carUp]) {
         if (car.canJump1) {
             Body.applyForce(
                 car.body,
@@ -525,8 +557,8 @@ move = () => {
             setTimeout(() => { car.canJump1 = true, car.canJump2 = false }, firstJumpCD)
         }
         else if (car.canJump2) {
-            if (keysDown['d']) {
-                if (keysDown['e']) {
+            if (keysDown[carRight]) {
+                if (keysDown[carBoost]) {
                     Body.applyForce(
                         car.body,
                         { x: car.body.position.x, y: car.body.position.y },
@@ -545,8 +577,8 @@ move = () => {
                     car.body, flipTorque
                 )
             }
-            else if (keysDown['a']) {
-                if (keysDown['e']) {
+            else if (keysDown[carUp]) {
+                if (keysDown[carBoost]) {
                     Body.applyForce(
                         car.body,
                         { x: car.body.position.x, y: car.body.position.y },
@@ -567,7 +599,7 @@ move = () => {
             }
             else {
 
-                if (keysDown['e']) {
+                if (keysDown[carRight]) {
                     Body.applyForce(
                         car.body,
                         { x: car.body.position.x, y: car.body.position.y },
@@ -587,26 +619,26 @@ move = () => {
         }
     }
     //car 2
-    if (keysDown['6']) {
+    if (keysDown[car2Right]) {
         if (car2.frontWheel.angularVelocity < maxRPM) {
             Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity + acceleration)
             Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity + acceleration)
         }
     }
-    if (keysDown['4']) {
+    if (keysDown[car2Left]) {
         if (car2.frontWheel.angularVelocity > -maxRPM) {
             Body.setAngularVelocity(car2.frontWheel, car2.frontWheel.angularVelocity - acceleration)
             Body.setAngularVelocity(car2.backWheel, car2.frontWheel.angularVelocity - acceleration)
         }
     }
-    if (keysDown['7']) {
+    if (keysDown[car2Boost]) {
         Body.applyForce(
             car2.body,
             { x: car2.body.position.x + boostBase.x, y: car2.body.position.y + boostBase.y },
             { x: -boostForce * (Math.cos(car2.body.angle)), y: -boostForce * (Math.sin(car2.body.angle)) }
         )
     }
-    if (keysDown['8']) {
+    if (keysDown[car2Up]) {
         if (car2.canJump1) {
             Body.applyForce(
                 car2.body,
@@ -618,8 +650,8 @@ move = () => {
             setTimeout(() => { car2.canJump1 = true, car2.canJump2 = false }, firstJumpCD)
         }
         else if (car2.canJump2) {
-            if (keysDown['4']) {
-                if (keysDown['7']) {
+            if (keysDown[car2Left]) {
+                if (keysDown[car2Boost]) {
                     Body.applyForce(
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
@@ -638,8 +670,8 @@ move = () => {
                     car2.body, -flipTorque
                 )
             }
-            else if (keysDown['6']) {
-                if (keysDown['7']) {
+            else if (keysDown[car2Right]) {
+                if (keysDown[car2Boost]) {
                     Body.applyForce(
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
@@ -660,7 +692,7 @@ move = () => {
             }
             else {
 
-                if (keysDown['7']) {
+                if (keysDown[car2Boost]) {
                     Body.applyForce(
                         car2.body,
                         { x: car2.body.position.x, y: car2.body.position.y },
