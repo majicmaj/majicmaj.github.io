@@ -17,6 +17,18 @@ Probably a computer
 a keyboard (the thing with the buttons on it)
 ```
 `
+## Plan
+Bronze (Complete): Create a car object and a ball object that can interact with eachother
+Silver (Complete): Add a second player and a stadium, with Goals that you can score in
+Gold (Complete): Add jumping and rocket-boosting capabilities, add a timer and display scores on-screen
+
+### Future Features
+-Multiplayer support
+-User authentication
+-Gamemodes
+-Car custiomization
+-Particle effects for boost
+-Controller support
 
 ## Deployment
 
